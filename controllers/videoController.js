@@ -6,7 +6,7 @@ export const search = (req, res) =>{
         query : {term :searchingBy}
     } = req;
     // == const searchingBy = req.auery.term
-    return res.render("search", {pageTitle:"Search", searchingBy});
+    return res.render("search", {pageTitle:"Search", searchingBy, videos});
 }
 // export const videos = (req, res) => res.render("videos", {pageTitle:"Videos"});
 export const upload = (req, res) => res.render("upload", {pageTitle:"Upload"});
