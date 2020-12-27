@@ -1,4 +1,4 @@
-import express from "express"
+import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
@@ -9,21 +9,21 @@ import videoRouter from "./routers/videoRouter";
 import globalRouter from "./routers/globalRouter";
 import routes from "./routes";
 
-
 const app = express();
 
-
-app.use( helmet({ contentSecurityPolicy: false, }));
-app.set("view engine", "pug")
+app.use(helmet({ contentSecurityPolicy: false }));
+app.set("view engine", "pug");
 app.use(cookieParser());
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended : true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
 app.use(localsMiddleware);
 
+//directory에서 File을 보내주는 middleware
+app.use("/uploads", express.static("uploads"));
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
 app.use(routes.videos, videoRouter);
 
-export default app; 
+export default app;
