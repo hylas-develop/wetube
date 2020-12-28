@@ -22,6 +22,7 @@ app.use(localsMiddleware);
 
 //directory에서 File을 보내주는 middleware
 app.use("/uploads", express.static("uploads"));
+app.use("/static", express.static("static"));
 app.use(routes.home, globalRouter);
 app.use(routes.users, userRouter);
 app.use(routes.videos, videoRouter);
