@@ -1,3 +1,5 @@
+/* eslint-disable import/newline-after-import */
+/* eslint-disable import/first */
 /* eslint-disable import/order */
 import dotenv from "dotenv";
 import app from "./app";
