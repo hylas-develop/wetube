@@ -4,6 +4,8 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import bodyParser from "body-parser";
 import session from "express-session";
+import MongoStore from "connect-mongo";
+import mongoose from "mongoose";
 import dotenv from "dotenv";
 import passport from "passport";
 import { localsMiddleware } from "./middlewares";
@@ -18,6 +20,8 @@ dotenv.config();
 
 const app = express();
 
+const CookieStore = MongoStore(session);
+
 app.use(helmet({ contentSecurityPolicy: false }));
 app.set("view engine", "pug");
 app.use("/uploads", express.static("uploads"));
@@ -31,6 +35,7 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     resave: true,
     saveUninitialized: false,
+    store: new CookieStore({ mongooseConnection: mongoose.connection }),
   })
 );
 app.use(passport.initialize());

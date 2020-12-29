@@ -122,9 +122,11 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
-a {
+a,
+a:visited {
   all: unset;
   cursor: pointer;
+  color: inherit;
 }
 
 *,
