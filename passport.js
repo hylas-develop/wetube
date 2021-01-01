@@ -1,6 +1,10 @@
 import passport from "passport";
 import GithubStrategy from "passport-github2";
-import { githubLoginCallback } from "./controllers/userController";
+import FacebookStrategy from "passport-facebook";
+import {
+  facebookLoginCallback,
+  githubLoginCallback,
+} from "./controllers/userController";
 import User from "./models/User";
 import routes from "./routes";
 import dotenv from "dotenv";
@@ -19,7 +23,17 @@ passport.use(
     githubLoginCallback
   )
 );
-console.log(`http://localhost:4000${routes.gitHubCallback}`);
+
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: process.env.FB_ID,
+      clientSecret: process.env.FB_SECRET,
+      callbackURL: `http://localhost:4000${routes.faceBookCallback}`,
+    },
+    facebookLoginCallback
+  )
+);
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
