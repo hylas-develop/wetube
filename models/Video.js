@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { MongooseDocument } from "mongoose";
 
 const VideoSchema = new mongoose.Schema({
   fileUrl: {
@@ -17,6 +17,10 @@ const VideoSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now, //function Date.now()
+  },
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
   comments: [
     {
