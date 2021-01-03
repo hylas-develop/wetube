@@ -1,6 +1,7 @@
 import routes from "../routes";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
+import { s3 } from "../middlewares";
 
 export const home = async (req, res) => {
   // Get All Videos
@@ -33,10 +34,10 @@ export const getUpload = (req, res) => {
 export const postUpload = async (req, res) => {
   const {
     body: { title, description },
-    file: { path },
+    file: { location },
   } = req;
   const newVideo = await Video.create({
-    fileUrl: path,
+    fileUrl: location,
     title,
     description,
     creator: req.user.id,
@@ -67,7 +68,7 @@ export const getEditVideo = async (req, res) => {
   try {
     const video = await Video.findById(id);
     //Protect illegal access
-    if (video.creator !== req.user.id) {
+    if (video.creator._id != req.user.id) {
       throw Error();
     } else {
       res.render("editVideo", { pageTitle: `Edit ${video.title}`, video });
@@ -96,10 +97,23 @@ export const deleteVideo = async (req, res) => {
   } = req;
   try {
     const video = await Video.findOne({ _id: id });
-    if (video.creator !== req.user.id) {
+    if (video.creator._id != req.user.id) {
       throw Error();
     } else {
-      Video.findByIdAndDelete({ _id: id });
+      const filePath = video.fileUrl.split("/video/")[1];
+      const delFile = {
+        Bucket: "hylas-wetube/video",
+        Key: filePath,
+      };
+      await s3
+        .deleteObject(delFile, (err, data) => {
+          if (err) console.log(err);
+          else console.log("The file has been removed");
+        })
+        .promise();
+
+      await Video.findByIdAndRemove({ _id: id });
+      res.redirect(routes.home);
     }
   } catch (error) {
     console.log(error);

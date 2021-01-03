@@ -35,6 +35,6 @@ block content
                     each comment in video.comments.reverse()
                         li(id=comment._id)
                             span=comment.text
-                            if String(comment.creator._id) == String(loggedUser._id)
+                            if loggedUser && String(comment.creator._id) == String(loggedUser._id)
                                 span.video__comments-list__delete(data_id=`${comment._id}`) ❌
                                 
