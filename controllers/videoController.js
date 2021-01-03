@@ -128,6 +128,7 @@ export const postRegisterView = async (req, res) => {
 // Add Comment
 
 export const postAddComment = async (req, res) => {
+  let commentObject;
   const {
     params: { id },
     body: { comment },
@@ -141,7 +142,23 @@ export const postAddComment = async (req, res) => {
     });
     video.comments.push(newComment.id);
     video.save();
+    commentObject = newComment;
 
+    res.status(200);
+  } catch (error) {
+    res.status(400);
+  } finally {
+    res.send(commentObject);
+  }
+};
+
+//Del Comment
+export const postDelComment = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  try {
+    await Comment.findByIdAndDelete(id);
     res.status(200);
   } catch (error) {
     res.status(400);
