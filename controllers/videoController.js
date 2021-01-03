@@ -1,5 +1,6 @@
 import routes from "../routes";
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 
 export const home = async (req, res) => {
   // Get All Videos
@@ -16,7 +17,6 @@ export const search = async (req, res) => {
   const {
     query: { term: searchingBy },
   } = req;
-  console.log(req.params);
   let videos = [];
   try {
     videos = await Video.find({
@@ -41,7 +41,6 @@ export const postUpload = async (req, res) => {
     description,
     creator: req.user.id,
   });
-  console.log(req.user);
   req.user.videos.push(newVideo.id);
   req.user.save();
   res.redirect(routes.videoDetail(newVideo.id));
@@ -52,8 +51,9 @@ export const videoDetail = async (req, res) => {
     params: { id },
   } = req;
   try {
-    const video = await Video.findById(id).populate("creator");
-    console.log(video);
+    const video = await Video.findById(id)
+      .populate("creator")
+      .populate("comments");
     res.render("videoDetail", { pageTitle: video.title, video });
   } catch (error) {
     res.redirect(routes.home);
@@ -117,6 +117,31 @@ export const postRegisterView = async (req, res) => {
     const video = await Video.findById(id);
     video.views += 1;
     video.save();
+    res.status(200);
+  } catch (error) {
+    res.status(400);
+  } finally {
+    res.end();
+  }
+};
+
+// Add Comment
+
+export const postAddComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { comment },
+    user,
+  } = req;
+  try {
+    const video = await Video.findById(id);
+    const newComment = await Comment.create({
+      text: comment,
+      creator: user.id,
+    });
+    video.comments.push(newComment.id);
+    video.save();
+
     res.status(200);
   } catch (error) {
     res.status(400);
