@@ -1,13 +1,13 @@
 import passport from "passport";
 import GithubStrategy from "passport-github2";
 import FacebookStrategy from "passport-facebook";
+import dotenv from "dotenv";
 import {
   facebookLoginCallback,
   githubLoginCallback,
 } from "./controllers/userController";
 import User from "./models/User";
 import routes from "./routes";
-import dotenv from "dotenv";
 
 dotenv.config();
 

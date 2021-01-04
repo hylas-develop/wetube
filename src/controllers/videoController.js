@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable eqeqeq */
 import routes from "../routes";
 import Video from "../models/Video";
 import Comment from "../models/Comment";
@@ -106,7 +108,7 @@ export const deleteVideo = async (req, res) => {
         Key: filePath,
       };
       await s3
-        .deleteObject(delFile, (err, data) => {
+        .deleteObject(delFile, (err, _) => {
           if (err) console.log(err);
           else console.log("The file has been removed");
         })

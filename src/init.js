@@ -1,6 +1,7 @@
 /* eslint-disable import/newline-after-import */
 /* eslint-disable import/first */
 /* eslint-disable import/order */
+import "@babel/polyfill";
 import dotenv from "dotenv";
 import app from "./app";
 dotenv.config();
